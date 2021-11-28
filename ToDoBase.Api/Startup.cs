@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using ToDoBase.Application.Queries.Users;
 using ToDoBase.Core;
+using ToDoBase.Persistence.Services;
 
 namespace ToDoBase.Api
 {
@@ -66,6 +67,9 @@ namespace ToDoBase.Api
                     Description = "Token:",
                 });
             });
+
+            services.AddSingleton<ICouchbaseService, CouchbaseService>();
+            services.AddSingleton<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

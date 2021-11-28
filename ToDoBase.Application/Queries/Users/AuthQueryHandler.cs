@@ -7,26 +7,33 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoBase.Core;
+using ToDoBase.Persistence.Services;
 
 namespace ToDoBase.Application.Queries.Users
 {
     public class AuthQueryHandler : IRequestHandler<AuthQuery, string>
     {
-        public AuthQueryHandler()
-        {
+        private readonly IUserService _userService;
 
+        public AuthQueryHandler(IUserService userService)
+        {
+            _userService = userService;
         }
 
         public async Task<string> Handle(AuthQuery request, CancellationToken cancellationToken)
         {
-            // TODO: auth user with user service and handle user not found exception
+            var user = await _userService.GetAndAuthenticateUser(request.Username, request.Password);
+            if (user == null)
+            {
+                // TODO: handle user not found exception
+            }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, "user")
+                    new Claim(ClaimTypes.NameIdentifier, user.Username)
                 }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Constants.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)

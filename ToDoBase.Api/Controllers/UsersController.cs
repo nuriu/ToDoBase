@@ -5,7 +5,9 @@ using Microsoft.Extensions.Logging;
 using System.Net.Mime;
 using System.Threading.Tasks;
 using ToDoBase.Api.Filters;
+using ToDoBase.Application.Commands.Users;
 using ToDoBase.Application.Queries.Users;
+using ToDoBase.Core.Entities;
 
 namespace ToDoBase.Api.Controllers
 {
@@ -24,10 +26,13 @@ namespace ToDoBase.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<ActionResult> Get()
+        [HttpPost]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(User), 200)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        public async Task<ActionResult<User>> Post([FromBody] CreateCommand data)
         {
-            return Ok();
+            return await _mediator.Send(data);
         }
 
         [AllowAnonymous]
