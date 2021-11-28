@@ -1,9 +1,11 @@
+using Couchbase.KeyValue;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ToDoBase.Core.Entities;
+using ToDoBase.Core.Services;
 
 namespace ToDoBase.Persistence.Services
 {
@@ -19,7 +21,7 @@ namespace ToDoBase.Persistence.Services
         public async Task<bool> IsUserExists(string username)
         {
             var result = await _couchbaseService.UserCollection.ExistsAsync(
-                $"user::{username}", new Couchbase.KeyValue.ExistsOptions());
+                $"user::{username}", new ExistsOptions());
 
             return result.Exists;
         }
@@ -38,7 +40,7 @@ namespace ToDoBase.Persistence.Services
             try
             {
                 await _couchbaseService.UserCollection.InsertAsync(
-                    $"user::{username}", user, new Couchbase.KeyValue.InsertOptions());
+                    $"user::{username}", user, new InsertOptions());
             }
             catch
             {
@@ -53,7 +55,7 @@ namespace ToDoBase.Persistence.Services
             try
             {
                 var result = await _couchbaseService.UserCollection.GetAsync(
-                    $"user::{username}", new Couchbase.KeyValue.GetOptions());
+                    $"user::{username}", new GetOptions());
                 return result.ContentAs<User>();
             }
             catch
@@ -72,10 +74,19 @@ namespace ToDoBase.Persistence.Services
             return user;
         }
 
-        public async Task UpdateUser(User user)
+        public async Task<bool> UpdateUser(User user)
         {
-            await _couchbaseService.UserCollection.ReplaceAsync(
-                $"user::{user.Username}", user, new Couchbase.KeyValue.ReplaceOptions());
+            try
+            {
+                await _couchbaseService.UserCollection.ReplaceAsync(
+                    $"user::{user.Username}", user, new ReplaceOptions());
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static string CalculateMd5Hash(string password)

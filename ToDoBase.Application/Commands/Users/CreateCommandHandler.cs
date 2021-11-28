@@ -2,7 +2,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoBase.Core.Entities;
-using ToDoBase.Persistence.Services;
+using ToDoBase.Core.Services;
 
 namespace ToDoBase.Application.Commands.Users
 {

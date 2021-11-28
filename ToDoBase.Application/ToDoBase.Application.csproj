@@ -14,4 +14,8 @@
     <ProjectReference Include="..\ToDoBase.Persistence\ToDoBase.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Queries\Users\" />
+  </ItemGroup>
+
 </Project>

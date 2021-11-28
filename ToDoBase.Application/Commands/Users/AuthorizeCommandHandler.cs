@@ -7,20 +7,20 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoBase.Core;
-using ToDoBase.Persistence.Services;
+using ToDoBase.Core.Services;
 
-namespace ToDoBase.Application.Queries.Users
+namespace ToDoBase.Application.Commands.Users
 {
-    public class AuthQueryHandler : IRequestHandler<AuthQuery, string>
+    public class AuthorizeCommandHandler : IRequestHandler<AuthorizeCommand, string>
     {
         private readonly IUserService _userService;
 
-        public AuthQueryHandler(IUserService userService)
+        public AuthorizeCommandHandler(IUserService userService)
         {
             _userService = userService;
         }
 
-        public async Task<string> Handle(AuthQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(AuthorizeCommand request, CancellationToken cancellationToken)
         {
             var user = await _userService.GetAndAuthenticateUser(request.Username, request.Password);
             if (user == null)

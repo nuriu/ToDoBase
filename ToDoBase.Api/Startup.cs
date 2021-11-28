@@ -9,8 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using ToDoBase.Application.Queries.Users;
+using ToDoBase.Application.Commands.Users;
 using ToDoBase.Core;
+using ToDoBase.Core.Services;
 using ToDoBase.Persistence.Services;
 
 namespace ToDoBase.Api
@@ -32,7 +33,7 @@ namespace ToDoBase.Api
             services.AddHealthChecks();
             services.AddControllers().AddFluentValidation(configuration =>
             {
-                configuration.RegisterValidatorsFromAssembly(typeof(AuthQuery).Assembly);
+                configuration.RegisterValidatorsFromAssembly(typeof(AuthorizeCommand).Assembly);
             });
 
             services.AddAuthentication(o =>
@@ -52,7 +53,7 @@ namespace ToDoBase.Api
                 };
             });
 
-            services.AddMediatR(typeof(AuthQuery).Assembly);
+            services.AddMediatR(typeof(AuthorizeCommand).Assembly);
 
             services.AddSwaggerGen(c =>
             {
@@ -70,6 +71,7 @@ namespace ToDoBase.Api
 
             services.AddSingleton<ICouchbaseService, CouchbaseService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IToDoItemService, ToDoItemService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

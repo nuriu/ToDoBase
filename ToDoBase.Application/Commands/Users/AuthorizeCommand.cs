@@ -1,17 +1,17 @@
 using FluentValidation;
 using MediatR;
 
-namespace ToDoBase.Application.Queries.Users
+namespace ToDoBase.Application.Commands.Users
 {
-    public class AuthQuery : IRequest<string>
+    public class AuthorizeCommand : IRequest<string>
     {
         public string Username { get; set; }
         public string Password { get; set; }
     }
 
-    public class AuthQueryValidator : AbstractValidator<AuthQuery>
+    public class AuthorizeCommandValidator : AbstractValidator<AuthorizeCommand>
     {
-        public AuthQueryValidator()
+        public AuthorizeCommandValidator()
         {
             RuleFor(q => q.Username).NotEmpty();
             RuleFor(q => q.Password).NotEmpty();

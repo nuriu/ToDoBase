@@ -28,6 +28,11 @@ namespace ToDoBase.Persistence.Services
 
                     ToDoBucket = await Cluster.BucketAsync("todos");
 
+                    // TODO: create bucket and collections and primary indexes if doesn't exists already
+                    // await Cluster.QueryIndexes.CreatePrimaryIndexAsync("todos");
+                    // CREATE PRIMARY INDEX ON `default`:`todos`.`_default`.`todoitems` 
+                    // CREATE PRIMARY INDEX ON `default`:`todos`.`_default`.`users` 
+
                     var defaultScope = await ToDoBucket.DefaultScopeAsync();
 
                     UserCollection = await defaultScope.CollectionAsync("users");

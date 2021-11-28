@@ -24,8 +24,7 @@ namespace ToDoBase.Application.Commands.Users
             RuleFor(c => c.Password)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .Must(ShouldContainDigits)
-                .WithMessage("Password should contain numbers.")
+                .Must(ShouldContainDigits).WithMessage("Password should contain numbers.")
                 .MinimumLength(8);
         }
 

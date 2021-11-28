@@ -1,6 +1,5 @@
 using Couchbase;
 using Couchbase.KeyValue;
-using System.Threading.Tasks;
 
 namespace ToDoBase.Persistence.Services
 {
