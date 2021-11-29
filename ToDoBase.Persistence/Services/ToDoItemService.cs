@@ -41,6 +41,21 @@ namespace ToDoBase.Persistence.Services
             return await itemsQueryResult.Rows.ToListAsync();
         }
 
+        public async Task<ToDoItem> GetItem(Guid toDoItemId)
+        {
+            try
+            {
+                var result = await _couchbaseService.ToDoCollection.GetAsync(
+                    $"todoitem::{toDoItemId}", new GetOptions());
+
+                return result.ContentAs<ToDoItem>();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task<ToDoItem> CreateItem(string username, string title, string description)
         {
             var toDoItem = new ToDoItem

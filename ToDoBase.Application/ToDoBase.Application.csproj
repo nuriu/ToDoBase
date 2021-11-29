@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Queries\Users\**" />
+    <EmbeddedResource Remove="Queries\Users\**" />
+    <None Remove="Queries\Users\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.4" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.14.1" />
@@ -12,10 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ToDoBase.Persistence\ToDoBase.Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Queries\Users\" />
   </ItemGroup>
 
 </Project>

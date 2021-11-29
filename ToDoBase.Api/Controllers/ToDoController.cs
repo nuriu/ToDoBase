@@ -49,5 +49,14 @@ namespace ToDoBase.Api.Controllers
             return await _mediator.Send(data);
         }
 
+        [HttpPut]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(typeof(ToDoItem), 200)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        public async Task<ToDoItem> Put([FromBody] UpdateCommand data)
+        {
+            data.Username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _mediator.Send(data);
+        }
     }
 }
