@@ -11,6 +11,7 @@ using ToDoBase.Api.Filters;
 using ToDoBase.Application.Commands.ToDoItems;
 using ToDoBase.Application.Queries.ToDoItems;
 using ToDoBase.Core.Entities;
+using ToDoBase.Core.Exceptions;
 
 namespace ToDoBase.Api.Controllers
 {
@@ -20,7 +21,7 @@ namespace ToDoBase.Api.Controllers
     [Route("[controller]")]
     public class ToDoController : ControllerBase
     {
-        protected readonly IMediator _mediator;
+        private readonly IMediator _mediator;
         private readonly ILogger<ToDoController> _logger;
 
         public ToDoController(ILogger<ToDoController> logger, IMediator mediator)
@@ -53,6 +54,7 @@ namespace ToDoBase.Api.Controllers
         [Consumes(MediaTypeNames.Application.Json)]
         [ProducesResponseType(typeof(ToDoItem), 200)]
         [ProducesResponseType(typeof(ValidationProblemDetails), 400)]
+        [ProducesResponseType(typeof(ToDoItemNotFoundException), 404)]
         public async Task<ToDoItem> Put([FromBody] UpdateCommand data)
         {
             data.Username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

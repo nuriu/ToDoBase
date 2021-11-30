@@ -2,6 +2,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoBase.Core.Entities;
+using ToDoBase.Core.Exceptions;
 using ToDoBase.Core.Services;
 
 namespace ToDoBase.Application.Commands.ToDoItems
@@ -21,8 +22,7 @@ namespace ToDoBase.Application.Commands.ToDoItems
 
             if (toDoItem == null || toDoItem.Creator.Username != request.Username)
             {
-                // TODO
-                return null;
+                throw new ToDoItemNotFoundException(request.ItemId);
             }
 
             toDoItem.IsDone = request.IsDone;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoBase.Core;
+using ToDoBase.Core.Exceptions;
 using ToDoBase.Core.Services;
 
 namespace ToDoBase.Application.Commands.Users
@@ -25,7 +26,7 @@ namespace ToDoBase.Application.Commands.Users
             var user = await _userService.GetAndAuthenticateUser(request.Username, request.Password);
             if (user == null)
             {
-                // TODO: handle user not found exception
+                throw new UserNotFoundException(request.Username);
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();

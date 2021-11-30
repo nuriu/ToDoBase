@@ -2,6 +2,7 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using ToDoBase.Core.Entities;
+using ToDoBase.Core.Exceptions;
 using ToDoBase.Core.Services;
 
 namespace ToDoBase.Application.Commands.Users
@@ -19,7 +20,7 @@ namespace ToDoBase.Application.Commands.Users
         {
             if (await _userService.IsUserExists(request.Username))
             {
-                // TODO: handle user conflict exception
+                throw new UsernameConflictException(request.Username);
             }
 
             return await _userService.CreateUser(request.Username, request.Password);
