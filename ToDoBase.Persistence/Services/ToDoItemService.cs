@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ToDoBase.Core;
 using ToDoBase.Core.Entities;
 using ToDoBase.Core.Services;
 
@@ -23,7 +24,8 @@ namespace ToDoBase.Persistence.Services
         public async Task<List<ToDoItem>> ListItems(string username, int page, int itemsPerPage)
         {
             var query =
-                "select todoitems.* from `todos`._default.todoitems " +
+                $"select {Constants.CB_TODO_ITEMS_COLLECTION}.* " +
+                $"from `{Constants.CB_BUCKET}`._default.{Constants.CB_TODO_ITEMS_COLLECTION} " +
                 "where creator.username=$1 " +
                 "order by createdAt " +
                 "limit $2 " +

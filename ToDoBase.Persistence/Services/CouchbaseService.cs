@@ -1,9 +1,8 @@
 using Couchbase;
 using Couchbase.KeyValue;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using ToDoBase.Core.Extensions;
+using ToDoBase.Core;
 
 namespace ToDoBase.Persistence.Services
 {
@@ -16,27 +15,19 @@ namespace ToDoBase.Persistence.Services
 
         public CouchbaseService()
         {
-            var CB_HOST = Environment.GetEnvironmentVariable("CB_HOST").DefaultIfEmpty("localhost");
-            var CB_USER = Environment.GetEnvironmentVariable("CB_USER").DefaultIfEmpty("todoadmin");
-            var CB_PASS = Environment.GetEnvironmentVariable("CB_PASS").DefaultIfEmpty("todoadmin");
-
             try
             {
                 Task.Run(async () =>
                 {
-                    Cluster = await Couchbase.Cluster.ConnectAsync($"couchbase://{CB_HOST}", CB_USER, CB_PASS);
+                    Cluster = await Couchbase.Cluster.ConnectAsync($"couchbase://{Constants.CB_HOST}", Constants.CB_USER, Constants.CB_PASS);
 
-                    ToDoBucket = await Cluster.BucketAsync("todos");
-
-                    // TODO: create bucket and collections and primary indexes if doesn't exists already
-                    // await Cluster.QueryIndexes.CreatePrimaryIndexAsync("todos");
-                    // CREATE PRIMARY INDEX ON `default`:`todos`.`_default`.`todoitems` 
-                    // CREATE PRIMARY INDEX ON `default`:`todos`.`_default`.`users` 
+                    ToDoBucket = await Cluster.BucketAsync(Constants.CB_BUCKET);
 
                     var defaultScope = await ToDoBucket.DefaultScopeAsync();
+                    UserCollection = await defaultScope.CollectionAsync(Constants.CB_USERS_COLLECTION);
+                    ToDoCollection = await defaultScope.CollectionAsync(Constants.CB_TODO_ITEMS_COLLECTION);
 
-                    UserCollection = await defaultScope.CollectionAsync("users");
-                    ToDoCollection = await defaultScope.CollectionAsync("todoitems");
+                    await Cluster.QueryIndexes.CreatePrimaryIndexAsync("todos");
                 }).Wait();
             }
             catch (AggregateException exception)
